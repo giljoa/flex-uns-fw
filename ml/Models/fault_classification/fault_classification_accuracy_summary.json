@@ -1,0 +1,27 @@
+{
+  "model_type": "fault_classification",
+  "total_classes": 5,
+  "fault_types": [
+    "Normal",
+    "BPFI",
+    "BPFO",
+    "Misalign",
+    "Unbalance"
+  ],
+  "mean_accuracy": 0.964388888888889,
+  "std_accuracy": 0.007238016916869488,
+  "fold_accuracies": [
+    0.9630555555555556,
+    0.9713888888888889,
+    0.9527777777777777,
+    0.9727777777777777,
+    0.9619444444444445
+  ],
+  "model_paths": [
+    "../Models/fault_classification\\fault_model_fold_1.h5",
+    "../Models/fault_classification\\fault_model_fold_2.h5",
+    "../Models/fault_classification\\fault_model_fold_3.h5",
+    "../Models/fault_classification\\fault_model_fold_4.h5",
+    "../Models/fault_classification\\fault_model_fold_5.h5"
+  ]
+}
