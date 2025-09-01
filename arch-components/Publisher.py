@@ -1,5 +1,5 @@
 ###################################################################################
-# Publisher1.py, EDGE-TO-CLOUD FAULT DIAGNOSIS - PUBLISHER 1
+# Publisher.py, EDGE-TO-CLOUD FAULT DIAGNOSIS - PUBLISHER
 # This script simulates the process of publishing vibration data to an MQTT broker.
 # Created on: 2025-08-31
 # Author: Joaquín López
@@ -49,7 +49,7 @@ MQTT_TOPIC_STORAGE = f"Enterprise/Site/Area/{DEVICE_ID}/Edge/MotorModel/vibratio
 MQTT_TOPIC_COMPUTE  = f"Enterprise/Site/Area/{DEVICE_ID}/Analysis/Vibration/raw_vector"
 
 # MQTT Client Setup
-client = mqtt.Client(client_id="vibration_data_publisher", clean_session=True)
+client = mqtt.Client(client_id=f"vibration_data_publisher{DEVICE_ID}", clean_session=True)
 
 if var == 1:
     client.tls_set()
@@ -140,7 +140,7 @@ while True:
     class_label = rng.choice(class_labels)
     print(f"\n📚 Device {DEVICE_ID} will publish class: {class_label}")
 
-    csv_path = f"./Data/CBS/vibration{round(fs/1000, 2)}kHz/{class_label}.csv"
+    csv_path = f"./data/vibration{round(fs/1000, 2)}kHz/{class_label}.csv"
     try:
         df_compute = pd.read_csv(csv_path)
     except FileNotFoundError:
