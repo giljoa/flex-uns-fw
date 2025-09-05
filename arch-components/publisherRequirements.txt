@@ -1,0 +1,9 @@
+# Core dependencies
+pandas>=2.0.0
+paho-mqtt>=1.6.1
+
+# Optional but used
+numpy>=1.25.0
+
+# These are part of the Python standard library, no need to install:
+# time, json, os, argparse, random, datetime
