@@ -140,7 +140,8 @@ while True:
     class_label = rng.choice(class_labels)
     print(f"\n📚 Device {DEVICE_ID} will publish class: {class_label}")
 
-    csv_path = f"./data/vibration{round(fs/1000, 2)}kHz/{class_label}.csv"
+    #csv_path = f"./data/vibration{round(fs/1000, 2)}kHz/{class_label}.csv"
+    csv_path = f"./data/vibrationKAIST/{class_label}.csv"
     try:
         df_compute = pd.read_csv(csv_path)
     except FileNotFoundError:
