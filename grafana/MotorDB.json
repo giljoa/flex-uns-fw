@@ -137,7 +137,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
@@ -145,7 +145,7 @@
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
+            "lineInterpolation": "stepBefore",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -430,6 +430,6 @@
   "timezone": "",
   "title": "Motor 1",
   "uid": "aGG750cHk",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
