@@ -187,4 +187,102 @@ def plot_signal_examples(data_dict, class_labels, sampling_rate, window_size):
     plt.tight_layout()
     plt.show()
 
+from collections import Counter
 
+def summarize_features(X, y, class_labels, name="dataset"):
+    """
+    Quick integrity report for feature tensors.
+    X: [n_segments, n_bins, n_channels]
+    y: [n_segments] integer ids aligned with class_labels
+    """
+    assert isinstance(X, np.ndarray) and isinstance(y, np.ndarray), "X and y must be numpy arrays"
+    assert X.ndim == 3, f"X must be 3D [segments, bins, channels], got {X.shape}"
+    assert y.ndim == 1, f"y must be 1D [segments], got {y.shape}"
+    assert X.shape[0] == y.shape[0], "Segments count mismatch between X and y"
+
+    # NaN or Inf check
+    has_nan = np.isnan(X).any()
+    has_inf = np.isinf(X).any()
+
+    # Basic stats
+    n_segments, n_bins, n_channels = X.shape
+    value_min = float(np.nanmin(X))
+    value_max = float(np.nanmax(X))
+    value_mean = float(np.nanmean(X))
+
+    # Label coverage
+    cnt = Counter(y.tolist())
+    label_rows = []
+    for i, lbl in enumerate(class_labels):
+        label_rows.append((lbl, cnt.get(i, 0)))
+
+    print(f"\n[{name}] Summary")
+    print(f"  Shape X: {X.shape}  y: {y.shape}")
+    print(f"  Channels: {n_channels}  Bins: {n_bins}")
+    print(f"  Stats  min:{value_min:.3f}  max:{value_max:.3f}  mean:{value_mean:.3f}")
+    print(f"  NaN present: {has_nan}  Inf present: {has_inf}")
+    print("  Samples per class:")
+    for lbl, n in label_rows:
+        print(f"   - {lbl}: {n}")
+
+    # Simple per channel energy check
+    energy = np.mean(np.sum(X**2, axis=1), axis=0)  # mean over segments of sum over bins per channel
+    print("  Mean spectral energy per channel:", np.round(energy, 3))
+    
+def plot_feature_example(X, y, class_labels, fs, label=None, idx=None, channel=0):
+    """
+    Plot one feature vector: magnitude spectrum of a chosen segment and channel.
+    If label is given chooses the first sample of that class. If idx is given uses that index.
+    """
+    n_segments, n_bins, n_channels = X.shape
+    if channel >= n_channels:
+        raise ValueError(f"channel {channel} out of range {n_channels}")
+
+    if idx is None:
+        if label is None:
+            idx = 0
+        else:
+            cls_id = class_labels.index(label)
+            where = np.where(y == cls_id)[0]
+            if len(where) == 0:
+                raise ValueError(f"No segments for label {label}")
+            idx = int(where[0])
+ 
+    freqs = np.fft.fftfreq(n_bins*2, d=1/fs)[:n_bins]  # consistent with window_size//2 bins
+    spec = X[idx, 1:, channel]  # remove DC (first bin)
+    freqs = freqs[1:]           # remove DC frequency
+
+    plt.figure(figsize=(10,4))
+    plt.plot(freqs, spec, lw=1)
+    ttl_label = class_labels[y[idx]] if 0 <= y[idx] < len(class_labels) else f"id {y[idx]}"
+    plt.title(f"Spectrum example  idx={idx}  label={ttl_label}  ch={channel}")
+    plt.xlabel("Frequency [Hz]")
+    plt.ylabel("Magnitude")
+    plt.grid(alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+
+def plot_class_mean_spectra(X, y, class_labels, fs, channel=0):
+    """
+    Plot mean spectrum per class for a chosen channel for a quick separability check.
+    """
+    n_segments, n_bins, n_channels = X.shape
+    if channel >= n_channels:
+        raise ValueError(f"channel {channel} out of range {n_channels}")
+    freqs = np.fft.fftfreq(n_bins*2, d=1/fs)[:n_bins]
+    freqs = freqs[1:]  # remove DC frequency
+
+    plt.figure(figsize=(12,6))
+    for cid, lbl in enumerate(class_labels):
+        idxs = np.where(y == cid)[0]
+        if len(idxs) == 0:
+            continue
+        mean_spec = X[idxs, 1:, channel].mean(axis=0)
+        plt.plot(freqs, mean_spec, lw=1, label=lbl)
+    plt.title(f"Mean spectra per class  ch={channel}")
+    plt.xlabel("Frequency [Hz]")
+    plt.ylabel("Magnitude")
+    plt.legend()
+    plt.grid(alpha=0.3)
+    plt.tight_layout()
+    plt.show()
