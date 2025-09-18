@@ -54,28 +54,3 @@ def plot_signal(data_dict, fs, seconds=0.1, channels=None, label=None, title_pre
     plt.legend()
     plt.tight_layout()
     plt.show()
-
-
-def compare_resampling(mat_path, channel="DE", max_len=6000):
-    """
-    Plot a short segment of the original and resampled signals
-    from a given CWRU .mat file.
-    """
-    # Load raw signal at 12 kHz
-    x = _load_mat_signal(mat_path, max_len=max_len, channels=(channel,))
-    # Resample to 25.6 kHz
-    y = _resample_to_target(x, UPSAMPLE, DOWNSAMPLE)
-
-    # Time axes
-    t_orig = np.arange(x.shape[0]) / sampling_rate_cwru
-    t_resampled = np.arange(y.shape[0]) / target_sampling_rate_cwru
-
-    plt.figure(figsize=(12, 5))
-    plt.plot(t_resampled, y[:,0], label=f"Resampled {target_sampling_rate_cwru/1000:.1f} kHz", alpha=0.7)
-    plt.plot(t_orig, x[:,0], label=f"Original {sampling_rate_cwru/1000:.1f} kHz", alpha=0.7)
-    plt.xlabel("Time [s]")
-    plt.ylabel("Amplitude")
-    plt.title(f"Resampling comparison for {os.path.basename(mat_path)} ({channel})")
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
