@@ -10,7 +10,7 @@ __pycache__/
 data/
 
 # Models
-Models/
+ml/models_kaist0/
 
 # Distribution / packaging
 .Python
