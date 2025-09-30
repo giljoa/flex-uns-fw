@@ -20,7 +20,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--device", default=os.getenv("DEVICE_ID", "motor1"))
 parser.add_argument(
     "--dataset",
-    choices=["KAIST", "CWRU"],
+    choices=["kaist", "cwru"],
     default=os.getenv("DATASET", "KAIST"),
     help="Choose which dataset folder to stream from"
 )
@@ -39,6 +39,7 @@ if var == 0:
     MQTT_PASSWORD = None
 elif var == 1:
     MQTT_BROKER = "d6343f2567d641e4a0e22d56e9492a04.s1.eu.hivemq.cloud"
+    #MQTT_BROKER = "5dcd5cd5264848d1a3c069eb39cf819e.s1.eu.hivemq.cloud"
     MQTT_PORT = 8883
     MQTT_USERNAME = "publisher"
     MQTT_PASSWORD = "joacoL21"
