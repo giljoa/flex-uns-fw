@@ -20,7 +20,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--device", default=os.getenv("DEVICE_ID", "motor1"))
 parser.add_argument(
     "--dataset",
-    choices=["kaist", "cwru"],
+    choices=["KAIST", "CWRU"],
     default=os.getenv("DATASET", "KAIST"),
     help="Choose which dataset folder to stream from"
 )
@@ -92,7 +92,7 @@ if not csv_files:
     raise RuntimeError(F"No CSV files found in {DATA_DIR}")
 
 # Per device RNG so multiple instances avoid lockstep
-rng = random.Random(DEVICE_ID)
+rng = random.Random(str(DEVICE_ID) + str(time.time_ns()))
 
 # ------------------------ Helpers ------------------------
 def publish_compute_batch(batch, batch_id):

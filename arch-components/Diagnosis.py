@@ -25,8 +25,8 @@ if var == 0:
     MQTT_USERNAME = None
     MQTT_PASSWORD = None
 else:
-    #MQTT_BROKER = "d6343f2567d641e4a0e22d56e9492a04.s1.eu.hivemq.cloud"
-    MQTT_BROKER = "5dcd5cd5264848d1a3c069eb39cf819e.s1.eu.hivemq.cloud"
+    MQTT_BROKER = "d6343f2567d641e4a0e22d56e9492a04.s1.eu.hivemq.cloud"
+    #MQTT_BROKER = "5dcd5cd5264848d1a3c069eb39cf819e.s1.eu.hivemq.cloud"
     MQTT_PORT = 8883
     MQTT_USERNAME = "diagnosis"
     MQTT_PASSWORD = "joacoL21"
