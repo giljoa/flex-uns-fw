@@ -13,7 +13,8 @@ from scipy.fftpack import fft
 from sklearn.preprocessing import StandardScaler
 
 # Load CNN Model
-model = keras.models.load_model('./ml/models/multi_domain/multi_domain_model_fold_1.h5')
+#model = keras.models.load_model('./ml/models/multi_domain/multi_domain_model_fold_1.h5')
+model = keras.models.load_model('./ml/models_transfer_backup/kaist_to_cwru_transfer.keras')
 
 # Configuration selector
 var = 1  # 0 public, 1 private
