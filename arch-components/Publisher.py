@@ -99,8 +99,12 @@ def publish_compute_batch(batch, batch_id):
     if not client.is_connected():
         print("MQTT not connected. Skip compute batch.")
         return
+    
+    ts_edge_ns = time.time_ns()  # edge timestamp in nanoseconds
+    
     payload = {
         "batch_id": batch_id,
+        "timestamp": ts_edge_ns,
         "data": batch.tolist()
     }
     js = json.dumps(payload)
