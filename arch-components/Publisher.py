@@ -13,7 +13,10 @@ import os
 import argparse
 import random
 import paho.mqtt.client as mqtt
+import ntplib
+
 from datetime import datetime
+from time import ctime
 
 # ------------------------ CLI ------------------------
 parser = argparse.ArgumentParser()
@@ -38,8 +41,8 @@ if var == 0:
     MQTT_USERNAME = None
     MQTT_PASSWORD = None
 elif var == 1:
-    MQTT_BROKER = "d6343f2567d641e4a0e22d56e9492a04.s1.eu.hivemq.cloud"
-    #MQTT_BROKER = "5dcd5cd5264848d1a3c069eb39cf819e.s1.eu.hivemq.cloud"
+    #MQTT_BROKER = "d6343f2567d641e4a0e22d56e9492a04.s1.eu.hivemq.cloud"
+    MQTT_BROKER = "5dcd5cd5264848d1a3c069eb39cf819e.s1.eu.hivemq.cloud"
     MQTT_PORT = 8883
     MQTT_USERNAME = "publisher"
     MQTT_PASSWORD = "joacoL21"
@@ -94,13 +97,41 @@ if not csv_files:
 # Per device RNG so multiple instances avoid lockstep
 rng = random.Random(str(DEVICE_ID) + str(time.time_ns()))
 
+# ------------------------ NTP time helper ------------------------
+
+NTP_SERVER = "pool.ntp.org"
+SYNC_INTERVAL_SEC = 60
+
+_ntp_offset_ns = 0
+_last_sync_sec = 0.0
+
+def _sync_ntp_if_needed():
+    global _ntp_offset_ns, _last_sync_sec
+    now_sec = time.time()
+    if now_sec - _last_sync_sec < SYNC_INTERVAL_SEC:
+        return
+    try:
+        c = ntplib.NTPClient()
+        resp = c.request(NTP_SERVER, version=3)
+        ntp_ns = int(resp.tx_time * 1e9)
+        local_ns = time.time_ns()
+        _ntp_offset_ns = ntp_ns - local_ns
+        _last_sync_sec = now_sec
+        print(f"NTP sync ok offset_ns={_ntp_offset_ns}")
+    except Exception as e:
+        print(f"NTP sync failed {e}")
+
+def now_ntp_ns():
+    _sync_ntp_if_needed()
+    return time.time_ns() + _ntp_offset_ns
+
 # ------------------------ Helpers ------------------------
 def publish_compute_batch(batch, batch_id):
     if not client.is_connected():
         print("MQTT not connected. Skip compute batch.")
         return
     
-    ts_edge_ns = time.time_ns()  # edge timestamp in nanoseconds
+    ts_edge_ns = now_ntp_ns()  # edge timestamp in nanoseconds
     
     payload = {
         "batch_id": batch_id,
@@ -108,6 +139,12 @@ def publish_compute_batch(batch, batch_id):
         "data": batch.tolist()
     }
     js = json.dumps(payload)
+
+    # size of payload
+    size_mb = len(js.encode("utf-8")) / (1024 * 1024)
+    payload["payload_size_mb"] = size_mb
+    js = json.dumps(payload)
+
     result = client.publish(MQTT_TOPIC_COMPUTE, js, qos=0)
     print("Compute batch {} rc={}".format(batch_id, result.rc))
 
@@ -132,6 +169,11 @@ def publish_storage_batch(batch, batch_id, start_timestamp_ns):
         "sensor_data": sensor_data
     }
     js = json.dumps(payload)
+    # size of payload
+    size_mb = len(js.encode("utf-8")) / (1024 * 1024)
+    payload["payload_size_mb"] = size_mb
+    js = json.dumps(payload)
+
     result = client.publish(MQTT_TOPIC_STORAGE, js, qos=0)
     print("Storage batch {} rc={}".format(batch_id, result.rc))
 
@@ -198,7 +240,7 @@ while True:
         start_s = batch_id * batch_size_storage
         end_s   = min(start_s + batch_size_storage, total_store)
         if start_s < end_s:
-            start_ts_ns = int(time.time() * 1e9)
+            start_ts_ns = now_ntp_ns()
             batch_storage = arr_store[start_s:end_s, :]
             publish_storage_batch(batch_storage, f"{class_label}:{batch_id}", start_ts_ns)
 

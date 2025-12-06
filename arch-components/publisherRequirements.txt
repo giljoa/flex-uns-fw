@@ -1,6 +1,7 @@
 # Core dependencies
 pandas>=2.0.0
 paho-mqtt>=1.6.1
+ntplib>=0.4.2
 
 # Optional but used
 numpy>=1.25.0
