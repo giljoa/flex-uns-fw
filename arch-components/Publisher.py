@@ -17,11 +17,11 @@ from datetime import datetime
 
 # ------------------------ CLI ------------------------
 parser = argparse.ArgumentParser()
-parser.add_argument("--device", default=os.getenv("DEVICE_ID", "motor1"))
+parser.add_argument("--device", default=os.getenv("DEVICE_ID", "Motor1"))
 parser.add_argument(
     "--dataset",
-    choices=["KAIST", "CWRU"],
-    default=os.getenv("DATASET", "KAIST"),
+    choices=["kaist", "cwru"],
+    default=os.getenv("DATASET", "kaist"),
     help="Choose which dataset folder to stream from"
 )
 args = parser.parse_args()
@@ -162,7 +162,7 @@ while True:
 
     # Validate channel count per dataset
     n_cols = arr.shape[1]
-    if DATASET == "KAIST":
+    if DATASET == "kaist":
         if n_cols != 4:
             print(f"KAIST csv must have 4 columns. Found {n_cols}. Skip.")
             time.sleep(1.0)

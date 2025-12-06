@@ -45,7 +45,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisLabel": "",
+            "axisLabel": "Vibration [g]",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
@@ -56,7 +56,7 @@
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -134,7 +134,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisLabel": "",
+            "axisLabel": "Magnitude",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "bars",
@@ -221,7 +221,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisLabel": "",
+            "axisLabel": "Fault Label",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
@@ -252,24 +252,34 @@
             {
               "options": {
                 "0": {
+                  "color": "green",
                   "index": 0,
                   "text": "Normal"
                 },
                 "1": {
+                  "color": "yellow",
                   "index": 1,
                   "text": "BPFI"
                 },
                 "2": {
+                  "color": "orange",
                   "index": 2,
                   "text": "BPFO"
                 },
                 "3": {
+                  "color": "blue",
                   "index": 3,
                   "text": "Misalign"
                 },
                 "4": {
+                  "color": "purple",
                   "index": 4,
                   "text": "Unbalance"
+                },
+                "5": {
+                  "color": "red",
+                  "index": 5,
+                  "text": "Ball"
                 }
               },
               "type": "value"
@@ -293,7 +303,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 8,
         "x": 0,
         "y": 14
       },
@@ -316,7 +326,7 @@
             "uid": "SUdjjnrHz"
           },
           "hide": false,
-          "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"fault_diagnosis\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/Motor1/Analysis/Diagnosis/prediction\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"fault_diagnosis\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/Motor1/Analysis/Diagnosis/prediction\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"fault_code\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -357,6 +367,11 @@
                   "color": "purple",
                   "index": 4,
                   "text": "Unbalance"
+                },
+                "5": {
+                  "color": "red",
+                  "index": 5,
+                  "text": "Ball"
                 }
               },
               "type": "value"
@@ -380,8 +395,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
+        "w": 8,
+        "x": 8,
         "y": 14
       },
       "id": 13,
@@ -407,12 +422,95 @@
             "uid": "SUdjjnrHz"
           },
           "hide": false,
-          "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"fault_diagnosis\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/Motor1/Analysis/Diagnosis/prediction\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"fault_diagnosis\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/Motor1/Analysis/Diagnosis/prediction\")\r\n    |> filter(fn: (r) => r[\"_field\"] == \"fault_code\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
       "title": "Diagnosis",
       "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "Latency [ms]",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-orange",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 14
+      },
+      "id": 15,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "SUdjjnrHz"
+          },
+          "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"fault_diagnosis\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/Motor1/Analysis/Diagnosis/prediction\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"edge_to_cloud_latency_ms\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Edge to Cloud Latency",
+      "type": "timeseries"
     }
   ],
   "refresh": "5s",
@@ -423,13 +521,13 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-1m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Motor 1",
   "uid": "aGG750cHk",
-  "version": 3,
+  "version": 5,
   "weekStart": ""
 }
