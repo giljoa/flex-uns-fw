@@ -54,6 +54,7 @@ else:
 
 MQTT_TOPIC_STORAGE = F"Enterprise/Site/Area/{DEVICE_ID}/Edge/MotorModel/vibration"
 MQTT_TOPIC_COMPUTE = F"Enterprise/Site/Area/{DEVICE_ID}/Analysis/Vibration/raw_vector"
+MQTT_TOPIC_METRICS = F"Enterprise/Site/Area/{DEVICE_ID}/Metrics/vibration_publisher"
 
 client = mqtt.Client(client_id=F"vibration_data_publisher_{DEVICE_ID}", clean_session=True)
 if var == 1:
@@ -142,11 +143,11 @@ def publish_compute_batch(batch, batch_id):
 
     # size of payload
     size_mb = len(js.encode("utf-8")) / (1024 * 1024)
-    payload["payload_size_mb"] = size_mb
-    js = json.dumps(payload)
+    payload_mb = {"batch_id": batch_id,  "timestamp": ts_edge_ns, "payload_size_mb": size_mb,  "units": "MB"}
+    client.publish(MQTT_TOPIC_METRICS + "/compute", json.dumps(payload_mb), qos=0)
 
     result = client.publish(MQTT_TOPIC_COMPUTE, js, qos=0)
-    print("Compute batch {} rc={}".format(batch_id, result.rc))
+    print("Compute batch {} rc={} size: {:.2f} MB".format(batch_id, result.rc, size_mb))
 
 def publish_storage_batch(batch, batch_id, start_timestamp_ns):
     if not client.is_connected():
@@ -171,11 +172,11 @@ def publish_storage_batch(batch, batch_id, start_timestamp_ns):
     js = json.dumps(payload)
     # size of payload
     size_mb = len(js.encode("utf-8")) / (1024 * 1024)
-    payload["payload_size_mb"] = size_mb
-    js = json.dumps(payload)
+    payload_mb = {"batch_id": batch_id,  "timestamp": start_timestamp_ns, "payload_size_mb": size_mb,  "units": "MB"}
+    client.publish(MQTT_TOPIC_METRICS + "/storage", json.dumps(payload_mb), qos=0)
 
     result = client.publish(MQTT_TOPIC_STORAGE, js, qos=0)
-    print("Storage batch {} rc={}".format(batch_id, result.rc))
+    print("Storage batch {} rc={} size: {:.2f} MB".format(batch_id, result.rc, size_mb))
 
 # ------------------------ Main loop ------------------------
 print("Starting simulation in folder:", DATA_DIR)
