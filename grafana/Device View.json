@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
-  "iteration": 1765077353803,
+  "id": 7,
+  "iteration": 1765211547614,
   "links": [
     {
       "asDropdown": false,
@@ -117,9 +117,8 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "4eB8iv3Hz"
+            "uid": "SUdjjnrHz"
           },
-          "hide": false,
           "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vibration_data\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/${DeviceTopic}/Edge/MotorModel/vibration\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
@@ -236,7 +235,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "4eB8iv3Hz"
+            "uid": "SUdjjnrHz"
           },
           "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"fault_diagnosis\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/${DeviceTopic}/Analysis/Diagnosis/prediction\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"fault_code\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
@@ -319,9 +318,8 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "4eB8iv3Hz"
+            "uid": "SUdjjnrHz"
           },
-          "hide": false,
           "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"fault_diagnosis\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/${DeviceTopic}/Analysis/Diagnosis/prediction\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"edge_to_cloud_latency_ms\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
@@ -407,9 +405,8 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "4eB8iv3Hz"
+            "uid": "SUdjjnrHz"
           },
-          "hide": false,
           "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"fft_vibration\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/${DeviceTopic}/Analysis/Vibration/fft\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
@@ -503,7 +500,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "4eB8iv3Hz"
+            "uid": "SUdjjnrHz"
           },
           "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"fault_diagnosis\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/${DeviceTopic}/Analysis/Diagnosis/prediction\")\r\n    |> filter(fn: (r) => r[\"_field\"] == \"fault_code\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
@@ -568,12 +565,13 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "MB"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 6,
         "w": 7,
         "x": 17,
         "y": 11
@@ -581,7 +579,7 @@
       "id": 16,
       "options": {
         "colorMode": "value",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -598,13 +596,111 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "4eB8iv3Hz"
+            "uid": "SUdjjnrHz"
           },
-          "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"fault_diagnosis\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/${DeviceTopic}/Analysis/Diagnosis/prediction\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"payload_size_mb\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "hide": false,
+          "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"payload_metrics\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"payload_size_mb\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/${DeviceTopic}/Metrics/vibration_publisher/compute\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
-      "title": "Payload Size",
+      "title": "Compute Payload Size",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Normal"
+                },
+                "1": {
+                  "color": "yellow",
+                  "index": 1,
+                  "text": "BPFI"
+                },
+                "2": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "BPFO"
+                },
+                "3": {
+                  "color": "blue",
+                  "index": 3,
+                  "text": "Misalign"
+                },
+                "4": {
+                  "color": "purple",
+                  "index": 4,
+                  "text": "Unbalance"
+                },
+                "5": {
+                  "color": "red",
+                  "index": 5,
+                  "text": "Ball"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "MB"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 7,
+        "x": 17,
+        "y": 17
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "SUdjjnrHz"
+          },
+          "hide": false,
+          "query": "from(bucket: \"FlexUNS_Bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"payload_metrics\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"payload_size_mb\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Enterprise/Site/Area/${DeviceTopic}/Metrics/vibration_publisher/storage\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Storage Payload Size",
       "type": "stat"
     }
   ],
@@ -638,7 +734,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-1m",
     "to": "now"
   },
   "timepicker": {
@@ -657,6 +753,6 @@
   "timezone": "",
   "title": "Device View",
   "uid": "aGG750cHk",
-  "version": 5,
+  "version": 3,
   "weekStart": ""
 }
