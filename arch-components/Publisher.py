@@ -42,7 +42,7 @@ if var == 0:
     MQTT_PASSWORD = None
 elif var == 1:
     #MQTT_BROKER = "d6343f2567d641e4a0e22d56e9492a04.s1.eu.hivemq.cloud"
-    MQTT_BROKER = "5dcd5cd5264848d1a3c069eb39cf819e.s1.eu.hivemq.cloud"
+    MQTT_BROKER = "4e636e5bce054be2a6aa2a51659f12ed.s1.eu.hivemq.cloud"
     MQTT_PORT = 8883
     MQTT_USERNAME = "publisher"
     MQTT_PASSWORD = "joacoL21"

@@ -64,7 +64,7 @@ if var == 0:
     MQTT_PASSWORD = None
 else:
     #MQTT_BROKER = "d6343f2567d641e4a0e22d56e9492a04.s1.eu.hivemq.cloud"
-    MQTT_BROKER = "5dcd5cd5264848d1a3c069eb39cf819e.s1.eu.hivemq.cloud"
+    MQTT_BROKER = "4e636e5bce054be2a6aa2a51659f12ed.s1.eu.hivemq.cloud"
     MQTT_PORT = 8883
     MQTT_USERNAME = "diagnosis"
     MQTT_PASSWORD = "joacoL21"
@@ -200,7 +200,7 @@ def on_message(client, userdata, message):
         fft_payload = json.dumps(fft_payload_dict)
 
         MQTT_TOPIC_FFT_DEV = f"{BASE}/{device_id}/Analysis/Vibration/fft"
-        #client.publish(MQTT_TOPIC_FFT_DEV, fft_payload) # comment to save data exchange
+        client.publish(MQTT_TOPIC_FFT_DEV, fft_payload) # comment to save data exchange
         print(f"FFT for batch {batch_id} published to {MQTT_TOPIC_FFT_DEV}")
 
         # -------- Inference using the new consistent channel feature extraction --------
@@ -229,6 +229,9 @@ def on_message(client, userdata, message):
 
         size_mb = len(json.dumps(prediction_dict).encode("utf-8")) / (1024 * 1024)
         prediction_dict["payload_size_mb"] = size_mb
+        MQTT_TOPIC_METRICS = f"{BASE}/{device_id}/Metrics/cloud_diagnosis"
+        client.publish(MQTT_TOPIC_METRICS, "%.2f" % size_mb)
+
         json_payload = json.dumps(prediction_dict)
 
         MQTT_TOPIC_PREDICT_DEV = f"{BASE}/{device_id}/Analysis/Diagnosis/prediction"
