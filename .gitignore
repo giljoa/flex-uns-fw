@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+# Data
+data/
+
+# Models
+ml/models_kaist0/
+ml/models/
+
 # Distribution / packaging
 .Python
 build/
