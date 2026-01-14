@@ -1,4 +1,4 @@
-# A Flexible UNS-Based Framework for Edge-to-Cloud Fault Diagnosis in Industrial Motors
+# A Flexible Edge-to-Cloud Framework for Industrial Motor Fault Diagnosis with Unified Namespace Integration
 
 ## Overview  
 This repository contains the implementation of a **Unified Namespace (UNS)-based IIoT framework** for **fault diagnosis in induction motors**. The framework is designed around three foundational pillars: **scalability, generalizability, and accessibility**.  
@@ -101,4 +101,4 @@ Real-time dashboards provide end-to-end visibility from raw vibration signals to
 If you use this repository in academic work, please cite:
 
 - Gilbert Delgado. An IIoT Cloud Based Solution for Fault Diagnosis of Induction Motors. MSc Thesis, Universidad Industrial de Santander, 2025.
-- Joaquín D. López et al. A Flexible UNS-Based Framework for Edge-to-Cloud Fault Diagnosis in Industrial Motors. (Submitted for journal publication).
+- Joaquín D. López et al. A Flexible Edge-to-Cloud Framework for Industrial Motor Fault Diagnosis with Unified Namespace Integration. (Submitted for journal publication).
